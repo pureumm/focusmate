@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusMate | Drift-Free Pomodoro & Study Analytics</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="brand">
+                <span class="brand-dot"></span>
+                <h1 class="logo">FocusMate</h1>
+                <span class="version-tag">v2.0</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#workspace">Workspace</a></li>
+                <li><a href="#analytics">Analytics</a></li>
+            </ul>
+            <div class="nav-actions">
+                <span class="streak-badge" id="streakBadge" title="Today's Focus Streak">🔥 0 streak</span>
+                <button id="darkModeBtn" aria-label="Toggle dark mode">🌙</button>
+            </div>
+        </nav>
+    </header>
+
+    <main id="workspace" class="container">
+        <div class="dashboard-grid">
+            <!-- Left Column: Circular SVG Timer -->
+            <section class="panel timer-panel">
+                <div class="mode-tabs" role="tablist">
+                    <button class="mode-btn active" data-mode="focus" data-minutes="25">Focus (25m)</button>
+                    <button class="mode-btn" data-mode="short" data-minutes="5">Short Break (5m)</button>
+                    <button class="mode-btn" data-mode="long" data-minutes="15">Long Break (15m)</button>
+                </div>
+
+                <div class="active-task-pill">
+                    <span class="label">Active Goal:</span>
+                    <span id="activeTaskText">Select a goal from your list →</span>
+                </div>
+
+                <div class="ring-container">
+                    <svg class="progress-ring" width="230" height="230" viewBox="0 0 230 230">
+                        <circle class="ring-bg" cx="115" cy="115" r="102" />
+                        <circle class="ring-progress" id="ringProgress" cx="115" cy="115" r="102" />
+                    </svg>
+                    <div class="ring-center">
+                        <h2 id="timerDisplay">25:00</h2>
+                        <span class="timer-status-text" id="timerStatusText">Ready to focus</span>
+                    </div>
+                </div>
+
+                <div class="timer-buttons">
+                    <button id="startPauseBtn" class="btn-primary">Start</button>
+                    <button id="resetBtn" class="btn-ghost">Reset</button>
+                </div>
+
+                <div class="timer-footer-controls">
+                    <div class="custom-time-group">
+                        <label for="customMinutesInput">Custom (m):</label>
+                        <input type="number" id="customMinutesInput" min="1" max="120" value="25">
+                        <button type="button" id="applyCustomBtn" class="btn-small">Set</button>
+                    </div>
+                    <span class="shortcut-hint">Shortcuts: <kbd>Space</kbd> Start/Pause · <kbd>R</kbd> Reset</span>
+                </div>
+            </section>
+
+            <!-- Right Column: Goal Manager -->
+            <section class="panel goals-panel">
+                <div class="panel-header">
+                    <div>
+                        <h3>Today's Goals</h3>
+                        <span class="hint-text">Click a goal to bind focus time</span>
+                    </div>
+                    <button type="button" id="clearCompletedBtn" class="clear-btn hidden">Clear Completed</button>
+                </div>
+
+                <form id="goalForm" class="goal-input-group">
+                    <input type="text" id="goalInput" placeholder="Add a study objective..." maxlength="80" required>
+                    <button type="submit">Add</button>
+                </form>
+
+                <div id="goalList" class="goal-list"></div>
+            </section>
+        </div>
+
+        <!-- Analytics & 7-Day Bar Chart -->
+        <section id="analytics" class="panel analytics-panel">
+            <div class="panel-header">
+                <div>
+                    <h3>Focus Analytics & 7-Day Trend</h3>
+                    <span class="hint-text">Client-side persisted study telemetry</span>
+                </div>
+                <div class="analytics-actions">
+                    <button type="button" id="loadSampleBtn" class="btn-outline" title="Populate 7-day demo data">Load Sample</button>
+                    <button type="button" id="exportJsonBtn" class="btn-outline">Export JSON</button>
+                    <button type="button" id="resetStatsBtn" class="btn-outline danger-hover">Reset Today</button>
+                </div>
+            </div>
+
+            <div class="analytics-layout">
+                <div class="kpi-column">
+                    <div class="stat-card">
+                        <span class="stat-label">Goal Completion</span>
+                        <strong class="stat-value" id="completedStats">0 / 0 (0%)</strong>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="goalProgressBar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <span class="stat-label">Today's Deep Focus</span>
+                        <strong class="stat-value" id="totalTimeStats">0 mins</strong>
+                        <span class="stat-sub" id="sessionCountStats">0 Pomodoro sessions completed</span>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <span class="stat-label">Last 7 Days Focus Volume (mins)</span>
+                        <span class="stat-sub" id="weeklyTotalText">7-day total: 0m</span>
+                    </div>
+                    <div class="bar-chart" id="weeklyBarChart"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- In-App Toast Notification -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <footer>
+        <p>© 2026 FocusMate. Zero-Dependency Vanilla HTML5, CSS3 & JavaScript.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
